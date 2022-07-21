@@ -34,4 +34,4 @@ jobs:
           push: true
           build-args: |
             ROS_DISTRO=humble
-          tags: ghcr.io/rosblox/ros-rosbridge-suite:humble
+          tags: ghcr.io/rosblox/${{ github.event.repository.name }}:humble
