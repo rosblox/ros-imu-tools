@@ -1,0 +1,3 @@
+[submodule "imu_tools"]
+	path = imu_tools
+	url = git@github.com:rosblox/imu_tools.git
