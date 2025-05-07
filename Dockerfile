@@ -21,6 +21,9 @@ RUN rosdep init && rosdep update && apt-get update && rosdep install --from-path
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
     colcon build --symlink-install --event-handlers console_direct+ --cmake-args ' -DCMAKE_BUILD_TYPE=Release'
 
-RUN echo 'alias build="colcon build --symlink-install  --event-handlers console_direct+"' >> /etc/bash.bashrc
-RUN echo 'source /colcon_ws/install/setup.bash; ros2 run imu_complementary_filter complementary_filter_node' >> /run.sh && chmod +x /run.sh
-RUN echo 'alias run="su - ros /run.sh"' >> /etc/bash.bashrc
+ENV LAUNCH_COMMAND='ros2 run imu_complementary_filter complementary_filter_node'
+
+# Create build and run aliases
+RUN echo 'alias build="colcon build --symlink-install  --event-handlers console_direct+"' >> /etc/bash.bashrc && \
+    echo 'alias run="su - ros --whitelist-environment=\"ROS_DOMAIN_ID\" /run.sh"' >> /etc/bash.bashrc && \
+    echo "source /colcon_ws/install/setup.bash; echo UID: $UID; echo ROS_DOMAIN_ID: $ROS_DOMAIN_ID; $LAUNCH_COMMAND" >> /run.sh && chmod +x /run.sh
